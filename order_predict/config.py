@@ -19,3 +19,9 @@ ORDER_COLLECTION_NAME = get_env('ORDER_COLLECTION_NAME', 'AI_Order')
 
 GEN_ORDERS_BATCH_SIZE = get_env('GEN_ORDERS_BATCH_SIZE', 1000, required_type=int)
 EXECUTOR_MAX_WORKERS = get_env('EXECUTOR_MAX_WORKERS', 5, required_type=int)
+
+ORDER_DF_ADD_MISSING_DATE = True
+ORDER_DF_DATE_FIELDS_TO_EXTRACT = ['day_of_week', 'holiday']
+# ORDER_DF_DATE_FIELDS_TO_EXTRACT = ['day_of_week', 'month', 'day_of_month', 'week_of_year', 'holiday']
+ORDER_DF_OUTLIER_CORRECTION_STRATEGY = 'CAP'
+# ORDER_DF_OUTLIER_CORRECTION_STRATEGY = 'FILTER'

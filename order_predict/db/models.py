@@ -20,6 +20,11 @@ class OrderDomain:
         order_docs = order_collection.find({}).sort('created_at', ASCENDING)
         return [OrderDomain.from_dict(order_doc) for order_doc in order_docs]
 
+    @staticmethod
+    def get_all_as_dict() -> list[dict]:
+        order_docs = order_collection.find({}).sort('created_at', ASCENDING)
+        return order_docs
+
     @classmethod
     def from_dict(cls, order_doc: dict) -> 'OrderDomain':
         return cls(order_id=order_doc['_id'], total=order_doc['total'], created_at=order_doc['created_at'])
