@@ -2,8 +2,8 @@ from order_predict.env import get_env
 
 ENVIRONMENT = get_env('ENVIRONMENT')
 
-SERVICE_NAME = get_env('SERVICE_NAME', 'OrderGen-App')
-BASE_PATH = get_env('BASE_PATH', '/order-gen-app')
+SERVICE_NAME = get_env('SERVICE_NAME', 'OrderPredict-App')
+BASE_PATH = get_env('BASE_PATH', '/order-predict-app')
 
 SERVER_HOST = get_env('SERVER_HOST')
 SERVER_PORT = get_env('SERVER_PORT', required_type=int)
@@ -17,7 +17,6 @@ DATABASE_URL = get_env('DATABASE_URL')
 DATABASE_NAME = get_env('DATABASE_NAME')
 ORDER_COLLECTION_NAME = get_env('ORDER_COLLECTION_NAME', 'AI_Order')
 
-GEN_ORDERS_BATCH_SIZE = get_env('GEN_ORDERS_BATCH_SIZE', 1000, required_type=int)
 EXECUTOR_MAX_WORKERS = get_env('EXECUTOR_MAX_WORKERS', 5, required_type=int)
 
 ORDER_DF_ADD_MISSING_DATE = True
