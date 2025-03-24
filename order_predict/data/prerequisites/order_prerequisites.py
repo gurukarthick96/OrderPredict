@@ -3,6 +3,8 @@ import pandas as pd
 
 def add_missing_date(df: pd.DataFrame) -> pd.DataFrame:
     """
+    Add missing date to the DataFrame.
+
     Parameters
     ----------
     df : pd.DataFrame

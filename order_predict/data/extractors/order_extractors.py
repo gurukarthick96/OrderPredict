@@ -2,25 +2,29 @@ import pandas as pd
 import pandas.core.arrays as pdarrays
 
 
-def extract_fields_from_date(df: pd.DataFrame, fields: list[str]) -> pd.DataFrame:
+def extract_fields_from_date(df: pd.DataFrame, date_field: str, fields: list[str]) -> pd.DataFrame:
     """
+    Extracts specific datetime-related fields from a given date column in a Pandas DataFrame.
+
     Parameters
     ----------
     df : pd.DataFrame
-        Data frame to process. accepted columns=['created_date']
+        Data frame to process. accepted columns=[date_field]
+    date_field : str
+        A date column from which datetime attributes are extracted
     fields : list[str]
-        fields to extract
+        A list of datetime attributes to extract
 
     Returns
     -------
     pd.DataFrame
-        Data frame, returned columns=['created_date', *fields]
+        Data frame, returned columns=[date_field, *fields]
     """
 
-    created_date_dt = df['created_date'].dt
+    date_dt = df[date_field].dt
 
     for field in fields:
-        df[field] = __extract_field_from_pandas_dtarray(created_date_dt, field)
+        df[field] = __extract_field_from_pandas_dtarray(date_dt, field)
 
     return df
 
@@ -32,7 +36,7 @@ def __extract_field_from_pandas_dtarray(dt: pdarrays.DatetimeArray, field: str) 
     dt : pdarrays.DatetimeArray
         Datetime Array to process
     field : str
-        field to extract
+        datetime attribute to extract
 
     Returns
     -------

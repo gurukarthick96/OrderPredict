@@ -7,12 +7,23 @@ from order_predict.data.prerequisites import add_missing_date
 from order_predict.db import OrderDomain
 
 
-def aggregate_by_date() -> pd.DataFrame:
+def aggregate_by_date(fields: list[str]) -> pd.DataFrame:
     """
+    Aggregates order data by date, calculating total sum and count, and extracts additional date-related fields.
+
+    Parameters
+    ----------
+    fields : list[str]
+        A list of datetime attributes to extract from the 'created_date' column.
+
     Returns
     -------
     pd.DataFrame
-        Data frame, returned columns=['created_date', 'total_sum', 'total_count', *config.ORDER_DF_DATE_FIELDS_TO_EXTRACT]
+        A DataFrame with aggregated order data, containing the following columns:
+        - 'created_date': The date of aggregation.
+        - 'total_sum': The sum of order totals for each date.
+        - 'total_count': The count of orders for each date.
+        - Additional extracted date-related fields from the `fields` list.
     """
 
     df = __get_orders_as_data_frame()
@@ -28,13 +39,17 @@ def aggregate_by_date() -> pd.DataFrame:
 
     df = correct_outliers(df, config.ORDER_DF_OUTLIER_CORRECTION_STRATEGY)
 
-    df = extract_fields_from_date(df, config.ORDER_DF_DATE_FIELDS_TO_EXTRACT)
+    df = extract_fields_from_date(df, 'created_date', fields)
+
+    df = df[['created_date', *fields, 'total_sum', 'total_count']]
 
     return df
 
 
 def __get_orders_as_data_frame() -> pd.DataFrame:
     """
+    Get All Orders from DB and form a DataFrame out of it.
+
     Returns
     -------
     pd.DataFrame

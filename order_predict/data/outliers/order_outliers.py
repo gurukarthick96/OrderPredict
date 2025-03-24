@@ -7,12 +7,14 @@ from order_predict.modules import logger, OutlierCorrectionStrategy
 
 def correct_outliers(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
     """
+    Corrects outliers in the given DataFrame based on the specified strategy (CAP or FILTER).
+
     Parameters
     ----------
     df : pd.DataFrame
         Data frame to process. accepted columns=['total_sum', 'total_count']
     strategy : str
-        outlier correction strategy
+        Outlier correction strategy
 
     Returns
     -------
@@ -36,7 +38,7 @@ def correct_outliers(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
 
 
 def __cap_outlier_sum_and_count(df: pd.DataFrame, fields: list[str]) -> pd.DataFrame:
-    logger.info('capping outliers...')
+    logger.info('capping outliers from dataframe...')
 
     original_values = df[fields]
 
@@ -56,7 +58,7 @@ def __clip_outliers(series: pd.Series) -> pd.Series:
 
 
 def __filter_outlier_sum_and_count(df: pd.DataFrame, fields: list[str]) -> pd.DataFrame:
-    logger.info('filtering outliers...')
+    logger.info('filtering outliers from dataframe...')
 
     inlier_mask = df[fields].apply(__find_outliers).all(axis=1)
 
@@ -80,6 +82,6 @@ def __find_lower_and_upper_bound(series: pd.Series) -> tuple[float, float]:
     lower_bound = max(q1 - 1.5 * iqr, 0)
     upper_bound = q3 + 1.5 * iqr
 
-    logger.info('%s column => lower_bound: %f and upper_bound: %f', series.name, lower_bound, upper_bound)
+    logger.info('for %s column => lower_bound: %f and upper_bound: %f', series.name, lower_bound, upper_bound)
 
     return lower_bound, upper_bound
