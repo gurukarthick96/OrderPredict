@@ -7,14 +7,18 @@ from order_predict.data.prerequisites import add_missing_date
 from order_predict.db import OrderDomain
 
 
-def aggregate_by_date(fields: list[str]) -> pd.DataFrame:
+def aggregate_by_date(fields_to_extract: list[str], fields_to_train: list[str]) -> pd.DataFrame:
     """
     Aggregates order data by date, calculating total sum and count, and extracts additional date-related fields.
 
     Parameters
     ----------
-    fields : list[str]
+    fields_to_extract : list[str]
         A list of datetime attributes to extract from the 'created_date' column.
+        Example: ['day_of_week', 'month', 'day_of_month', 'week_of_year', 'holiday'].
+    fields_to_train : list[str]
+        A list of column names representing target variables for training.
+        Example: ['total_sum', 'total_count'].
 
     Returns
     -------
@@ -37,11 +41,11 @@ def aggregate_by_date(fields: list[str]) -> pd.DataFrame:
     if config.ORDER_DF_ADD_MISSING_DATE:
         df = add_missing_date(df)
 
-    df = correct_outliers(df, config.ORDER_DF_OUTLIER_CORRECTION_STRATEGY)
+    df = correct_outliers(df, fields_to_train, config.ORDER_DF_OUTLIER_CORRECTION_STRATEGY)
 
-    df = extract_fields_from_date(df, 'created_date', fields)
+    df = extract_fields_from_date(df, 'created_date', fields_to_extract)
 
-    df = df[['created_date', *fields, 'total_sum', 'total_count']]
+    df = df[['created_date', *fields_to_extract, *fields_to_train]]
 
     return df
 

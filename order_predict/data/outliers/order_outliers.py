@@ -5,7 +5,7 @@ import pandas as pd
 from order_predict.modules import logger, OutlierCorrectionStrategy
 
 
-def correct_outliers(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
+def correct_outliers(df: pd.DataFrame, fields_to_correct_outliers: list[str], strategy: str) -> pd.DataFrame:
     """
     Corrects outliers in the given DataFrame based on the specified strategy (CAP or FILTER).
 
@@ -13,6 +13,9 @@ def correct_outliers(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
     ----------
     df : pd.DataFrame
         Data frame to process. accepted columns=['total_sum', 'total_count']
+    fields_to_correct_outliers : list[str]
+        A list of column names representing target variables for correcting outliers.
+        Example: ['total_sum', 'total_count'].
     strategy : str
         Outlier correction strategy
 
@@ -24,13 +27,11 @@ def correct_outliers(df: pd.DataFrame, strategy: str) -> pd.DataFrame:
 
     logger.debug('before outlier corrections: \n%s', df)
 
-    fields = ['total_sum', 'total_count']
-
     match OutlierCorrectionStrategy(strategy):
         case OutlierCorrectionStrategy.CAP:
-            df = __cap_outlier_sum_and_count(df, fields)
+            df = __cap_outlier_sum_and_count(df, fields_to_correct_outliers)
         case OutlierCorrectionStrategy.FILTER:
-            df = __filter_outlier_sum_and_count(df, fields)
+            df = __filter_outlier_sum_and_count(df, fields_to_correct_outliers)
 
     logger.debug('after outlier corrections: \n%s', df)
 

@@ -9,19 +9,25 @@ from order_predict.modules import logger
 from order_predict.train.regression import RegressionType, build_regression_model
 
 
-def train_regression_model(df: pd.DataFrame, fields: list[str], reg_type: RegressionType = None):
+def train_regression_model(df: pd.DataFrame,
+                           fields_to_extract: list[str], fields_to_train: list[str],
+                           reg_type: RegressionType = None):
     """
     Trains a regression model using the provided DataFrame.
 
     Parameters
     ----------
     df : pd.DataFrame
-        The input DataFrame containing training data.
-    fields : list[str]
+        The input DataFrame containing the dataset for training.
+    fields_to_extract : list[str]
         A list of column names to use as features (X).
+        Example: ['day_of_week', 'month', 'day_of_month', 'week_of_year', 'holiday'].
+    fields_to_train : list[str]
+        A list of column names to use as target variables (y).
+        Example: ['total_sum', 'total_count'].
     reg_type : RegressionType, optional
         The type of regression model to use. If None, the best model is selected
-        based on evaluation. Default is None.
+        based on RMSE evaluation. Default is None.
 
     Returns
     -------
@@ -29,8 +35,8 @@ def train_regression_model(df: pd.DataFrame, fields: list[str], reg_type: Regres
         A trained regression model instance.
     """
 
-    x = df[fields]
-    y = df[['total_sum', 'total_count']]
+    x = df[fields_to_extract]
+    y = df[fields_to_train]
 
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=config.ORDER_TRAIN_TEST_SPLIT_SIZE, random_state=42
