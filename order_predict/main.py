@@ -1,5 +1,6 @@
 from order_predict import config
 from order_predict.data import order_df
+from order_predict.db import ensure_indexes
 from order_predict.modules import logger
 from order_predict.predict import order_predict
 from order_predict.train import order_train
@@ -32,4 +33,5 @@ def train_and_predict_order():
 
 
 if __name__ == '__main__':
+    ensure_indexes()
     train_and_predict_order()
